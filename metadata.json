@@ -1,0 +1,6 @@
+{
+  "name": "Social Bio & Profile Maker",
+  "description": "ফেসবুক, ইউটিউব, গেমিং ও সোশ্যাল মিডিয়া প্রোফাইল বায়ো পেজ মেকার - লাইভ প্রিভিউ ও HTML ডাউনলোড সুবিধা সহ",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
