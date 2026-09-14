@@ -107,7 +107,12 @@ export const SocialBioCard: React.FC<SocialBioCardProps> = ({
       {/* Banner */}
       <div className="relative h-36 w-full bg-slate-800 overflow-hidden">
         {personal.bannerUrl ? (
-          <img src={personal.bannerUrl} alt="Cover" className="w-full h-full object-cover opacity-85" />
+          <img 
+            src={personal.bannerUrl} 
+            alt="Cover" 
+            referrerPolicy="no-referrer"
+            className="w-full h-full object-cover opacity-85" 
+          />
         ) : (
           <div className="w-full h-full bg-gradient-to-r from-cyan-900 via-indigo-900 to-purple-900"></div>
         )}
@@ -143,6 +148,7 @@ export const SocialBioCard: React.FC<SocialBioCardProps> = ({
             <img 
               src={personal.avatarUrl || 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=400'} 
               alt={candidateName} 
+              referrerPolicy="no-referrer"
               className="w-full h-full object-cover rounded-xl"
             />
           </div>
@@ -297,7 +303,12 @@ export const SocialBioCard: React.FC<SocialBioCardProps> = ({
             <div className="grid grid-cols-2 gap-2">
               {highlights.map(h => (
                 <div key={h.id} className="group relative rounded-xl overflow-hidden aspect-video border-2 border-slate-700 bg-slate-900 shadow-md">
-                  <img src={h.imageUrl} alt={h.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <img 
+                    src={h.imageUrl} 
+                    alt={h.title} 
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-2">
                     <h4 className="text-xs font-extrabold text-white leading-tight truncate">{h.title}</h4>
                     {h.subtitle && <p className="text-[10px] text-cyan-200 font-semibold truncate">{h.subtitle}</p>}

@@ -92,7 +92,7 @@ export function generateStandaloneBioHtml(
     <!-- Banner Cover -->
     <div class="relative h-36 sm:h-44 w-full bg-slate-800 overflow-hidden">
       ${personal.bannerUrl 
-        ? `<img src="${personal.bannerUrl}" alt="Banner" class="w-full h-full object-cover opacity-80" />`
+        ? `<img src="${personal.bannerUrl}" alt="Banner" referrerpolicy="no-referrer" class="w-full h-full object-cover opacity-80" />`
         : `<div class="w-full h-full bg-gradient-to-r from-cyan-900 via-indigo-900 to-purple-900"></div>`
       }
       <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-black/30"></div>
@@ -127,6 +127,7 @@ export function generateStandaloneBioHtml(
           <img 
             src="${personal.avatarUrl || 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=400'}" 
             alt="${candidateName}" 
+            referrerpolicy="no-referrer"
             class="w-full h-full object-cover rounded-xl"
           />
         </div>
@@ -268,7 +269,7 @@ export function generateStandaloneBioHtml(
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
             ${highlights.map(h => `
               <div class="group relative rounded-xl overflow-hidden aspect-square border border-slate-800 bg-slate-900">
-                <img src="${h.imageUrl}" alt="${h.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img src="${h.imageUrl}" alt="${h.title}" referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-2">
                   <h4 class="text-[11px] font-bold text-white leading-tight truncate">${h.title}</h4>
                   ${h.subtitle ? `<p class="text-[9px] text-cyan-300 truncate">${h.subtitle}</p>` : ''}

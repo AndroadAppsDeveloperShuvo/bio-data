@@ -1,6 +1,7 @@
 import React from 'react';
 import { HighlightItem } from '../../types';
 import { Sparkles, Plus, Trash2, Image } from 'lucide-react';
+import { extractDirectImageUrl, isImgBBViewerUrl, resolveImageUrl } from '../../utils/imageHelper';
 
 interface HighlightsEditorProps {
   highlights: HighlightItem[];
@@ -74,7 +75,12 @@ export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({
       <div className="space-y-3">
         {highlights.map(h => (
           <div key={h.id} className="p-3.5 bg-white border-2 border-slate-300 rounded-2xl flex items-center gap-3 shadow-xs">
-            <img src={h.imageUrl} alt={h.title} className="w-14 h-14 rounded-xl object-cover border-2 border-slate-300 shrink-0" />
+            <img 
+              src={h.imageUrl} 
+              alt={h.title} 
+              referrerPolicy="no-referrer"
+              className="w-14 h-14 rounded-xl object-cover border-2 border-slate-300 shrink-0" 
+            />
             <div className="flex-1 min-w-0 space-y-1.5">
               <input
                 type="text"
@@ -86,8 +92,18 @@ export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({
               <input
                 type="text"
                 value={h.imageUrl}
-                onChange={(e) => handleUpdate(h.id, { imageUrl: e.target.value })}
-                placeholder="ইমেজ URL"
+                onChange={async (e) => {
+                  const val = e.target.value;
+                  const extracted = extractDirectImageUrl(val);
+                  handleUpdate(h.id, { imageUrl: extracted });
+                  if (isImgBBViewerUrl(extracted)) {
+                    const res = await resolveImageUrl(extracted);
+                    if (res.success && res.directUrl) {
+                      handleUpdate(h.id, { imageUrl: res.directUrl });
+                    }
+                  }
+                }}
+                placeholder="ইমেজ URL অথবা ImgBB লিংক"
                 className="w-full text-xs font-mono font-bold text-slate-700 px-2.5 py-1 border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-600"
               />
             </div>
