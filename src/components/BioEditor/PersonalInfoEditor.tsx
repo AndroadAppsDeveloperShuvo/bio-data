@@ -139,24 +139,24 @@ export const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="text-xs font-black text-slate-950">ImgBB (image bb) সাপোর্ট সক্রিয় 🚀</h4>
+              <h4 className="text-xs font-black text-slate-950">ছবি আপলোডার ও ImgBB সাপোর্ট সক্রিয় 🚀</h4>
               <span className="px-2 py-0.5 bg-sky-200 text-sky-950 text-[10px] font-black rounded-full border border-sky-400">
                 অটো কনভার্ট
               </span>
             </div>
             <p className="text-xs font-semibold text-slate-800 mt-0.5">
-              ImgBB তে আপলোড করা যেকোনো লিংক (ibb.co), HTML কোড বা ডিরেক্ট লিংক পেস্ট করলেই প্রোফাইল ও কভারে ছবি শো করবে।
+              আপলোড করা ছবির লিংক (ibb.co বা ডিরেক্ট ইমেজ URL) পেস্ট করলেই প্রোফাইল ও কভারে ছবি শো করবে।
             </p>
           </div>
         </div>
 
         <a
-          href="https://imgbb.com/"
+          href="https://androadappsdevelopershuvo.github.io/web_image_uploader/WEB%20IMAGE%20UPLOAS.html"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-black text-xs rounded-xl shadow-sm transition-all shrink-0"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-black text-xs rounded-xl shadow-sm transition-all shrink-0"
         >
-          <span>ImgBB-তে ছবি আপলোড করুন</span>
+          <span>ছবি আপলোড করুন</span>
           <ExternalLink className="w-3.5 h-3.5" />
         </a>
       </div>
