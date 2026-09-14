@@ -22,7 +22,7 @@ async function startServer() {
       }
 
       // If already direct image link
-      if (targetUrl.includes("i.ibb.co") || targetUrl.includes("https://androadappsdevelopershuvo.github.io/web_image_uploader/WEB%20IMAGE%20UPLOAS.html")) {
+      if (targetUrl.includes("htmlhttps://androadappsdevelopershuvo.github.io/web_image_uploader/WEB%20IMAGE%20UPLOAS.html") || targetUrl.includes("https://androadappsdevelopershuvo.github.io/web_image_uploader/WEB%20IMAGE%20UPLOAS.html")) {
         return res.json({ success: true, directUrl: targetUrl });
       }
 
