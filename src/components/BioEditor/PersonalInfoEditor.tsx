@@ -171,7 +171,7 @@ export const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({
             type="text"
             value={personal.name}
             onChange={(e) => handleChange('name', e.target.value)}
-            placeholder="যেমন: SHUVO GAMING / তানভীর হাসান"
+            placeholder="যেমন: ⚡ 乂 ＳＨＵＶＯ 乂 ⚡"
             className="w-full px-3 py-2 text-xs sm:text-sm font-bold text-slate-950 bg-white border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-600 placeholder:text-slate-400"
           />
         </div>

@@ -301,20 +301,50 @@ export const SocialBioCard: React.FC<SocialBioCardProps> = ({
           <div>
             <h2 className="text-xs font-extrabold text-slate-300 uppercase tracking-wider mb-2 px-1">হাইলাইটস ও ফটোস</h2>
             <div className="grid grid-cols-2 gap-2">
-              {highlights.map(h => (
-                <div key={h.id} className="group relative rounded-xl overflow-hidden aspect-video border-2 border-slate-700 bg-slate-900 shadow-md">
-                  <img 
-                    src={h.imageUrl} 
-                    alt={h.title} 
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-2">
-                    <h4 className="text-xs font-extrabold text-white leading-tight truncate">{h.title}</h4>
-                    {h.subtitle && <p className="text-[10px] text-cyan-200 font-semibold truncate">{h.subtitle}</p>}
+              {highlights.map(h => {
+                const hasLink = Boolean(h.linkUrl && h.linkUrl.trim() !== '');
+                const cardInner = (
+                  <>
+                    <img 
+                      src={h.imageUrl} 
+                      alt={h.title} 
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-2">
+                      <div className="flex items-center justify-between gap-1">
+                        <h4 className="text-xs font-extrabold text-white leading-tight truncate">{h.title}</h4>
+                        {hasLink && (
+                          <span className="shrink-0 p-1 rounded-md bg-cyan-500/90 text-slate-950 shadow-xs group-hover:scale-110 transition-transform" title="লিংক ওপেন করুন">
+                            <ExternalLink className="w-2.5 h-2.5 stroke-[2.5]" />
+                          </span>
+                        )}
+                      </div>
+                      {h.subtitle && <p className="text-[10px] text-cyan-200 font-semibold truncate">{h.subtitle}</p>}
+                    </div>
+                  </>
+                );
+
+                return hasLink ? (
+                  <a 
+                    key={h.id} 
+                    href={h.linkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative rounded-xl overflow-hidden aspect-video border-2 border-slate-700 hover:border-cyan-400 bg-slate-900 shadow-md transition-all block cursor-pointer active:scale-[0.98]"
+                    title={`${h.title} - লিংকে যেতে ক্লিক করুন`}
+                  >
+                    {cardInner}
+                  </a>
+                ) : (
+                  <div 
+                    key={h.id} 
+                    className="group relative rounded-xl overflow-hidden aspect-video border-2 border-slate-700 bg-slate-900 shadow-md select-none"
+                  >
+                    {cardInner}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

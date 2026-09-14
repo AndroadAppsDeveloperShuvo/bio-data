@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { SocialBioState, BioTheme } from './types';
-import { GAMER_FREEFIRE_PRESET, CREATOR_VLOGGER_PRESET, DEVELOPER_TECH_PRESET } from './data/presets';
+import { 
+  DEFAULT_SHUVO_PRESET,
+  GAMER_FREEFIRE_PRESET, 
+  CREATOR_VLOGGER_PRESET, 
+  DEVELOPER_TECH_PRESET 
+} from './data/presets';
 import { BIO_THEMES } from './data/themes';
 import { HeaderNavbar } from './components/HeaderNavbar';
 import { BioFormContainer } from './components/BioEditor/BioFormContainer';
@@ -18,20 +23,23 @@ import {
   CheckCircle
 } from 'lucide-react';
 
-const STORAGE_KEY = 'social_bio_maker_state_v1';
-const THEME_STORAGE_KEY = 'social_bio_maker_theme_v1';
+const STORAGE_KEY = 'social_bio_maker_state_v3';
+const THEME_STORAGE_KEY = 'social_bio_maker_theme_v3';
 
 export function App() {
   const [bioState, setBioState] = useState<SocialBioState>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (parsed?.personal?.name && !parsed.personal.name.includes('Tanvir')) {
+          return parsed;
+        }
       }
     } catch (e) {
       console.error(e);
     }
-    return GAMER_FREEFIRE_PRESET;
+    return DEFAULT_SHUVO_PRESET;
   });
 
   const [currentTheme, setCurrentTheme] = useState<BioTheme>(() => {
@@ -44,7 +52,7 @@ export function App() {
     } catch (e) {
       console.error(e);
     }
-    return BIO_THEMES[0]; // Cyberpunk gamer
+    return BIO_THEMES[3] || BIO_THEMES[0]; // Modern Bento Dark
   });
 
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
@@ -85,9 +93,9 @@ export function App() {
   };
 
   const handleReset = () => {
-    if (window.confirm('আপনি কি নিশ্চিত যে সকল ডাটা রিসেট করে ডিফল্ট গেমার প্রিসেটে ফিরে যেতে চান?')) {
-      setBioState(GAMER_FREEFIRE_PRESET);
-      setCurrentTheme(BIO_THEMES[0]);
+    if (window.confirm('আপনি কি নিশ্চিত যে সকল ডাটা রিসেট করে ডিফল্ট শুভ (SHUVO) প্রিসেটে ফিরে যেতে চান?')) {
+      setBioState(DEFAULT_SHUVO_PRESET);
+      setCurrentTheme(BIO_THEMES[3] || BIO_THEMES[0]);
     }
   };
 

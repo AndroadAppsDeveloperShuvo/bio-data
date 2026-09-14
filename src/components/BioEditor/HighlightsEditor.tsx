@@ -1,6 +1,6 @@
 import React from 'react';
 import { HighlightItem } from '../../types';
-import { Sparkles, Plus, Trash2, Image } from 'lucide-react';
+import { Sparkles, Plus, Trash2, Image, Link as LinkIcon, ExternalLink } from 'lucide-react';
 import { extractDirectImageUrl, isImgBBViewerUrl, resolveImageUrl } from '../../utils/imageHelper';
 
 interface HighlightsEditorProps {
@@ -9,10 +9,10 @@ interface HighlightsEditorProps {
 }
 
 const HIGHLIGHT_PRESETS = [
-  { title: '🏆 Esports Champion', subtitle: 'Tournament 2025', imageUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&auto=format&fit=crop&q=80' },
-  { title: '🎮 Gaming Setup', subtitle: 'PC & Monitor', imageUrl: 'https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=300&auto=format&fit=crop&q=80' },
-  { title: '🎯 YouTube 100K', subtitle: 'Silver Button', imageUrl: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=300&auto=format&fit=crop&q=80' },
-  { title: '🏔️ Travel Sajek', subtitle: 'Vlog Shoot', imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&auto=format&fit=crop&q=80' },
+  { title: '🏆 Esports Champion', subtitle: 'Tournament 2025', imageUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&auto=format&fit=crop&q=80', linkUrl: '' },
+  { title: '🎮 Gaming Setup', subtitle: 'PC & Monitor', imageUrl: 'https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=300&auto=format&fit=crop&q=80', linkUrl: '' },
+  { title: '🎯 YouTube 100K', subtitle: 'Silver Button', imageUrl: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=300&auto=format&fit=crop&q=80', linkUrl: '' },
+  { title: '🏔️ Travel Sajek', subtitle: 'Vlog Shoot', imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&auto=format&fit=crop&q=80', linkUrl: '' },
 ];
 
 export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({
@@ -24,7 +24,8 @@ export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({
       id: 'h_' + Date.now() + Math.random().toString(36).substring(2, 5),
       title: preset ? preset.title : 'নতুন হাইলাইট মোমেন্ট',
       subtitle: preset ? preset.subtitle : 'ফটো ও মেমোরিজ',
-      imageUrl: preset ? preset.imageUrl : 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&auto=format&fit=crop&q=80'
+      imageUrl: preset ? preset.imageUrl : 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&auto=format&fit=crop&q=80',
+      linkUrl: preset?.linkUrl || ''
     };
     onChange([...highlights, newItem]);
   };
@@ -74,14 +75,25 @@ export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({
       {/* List */}
       <div className="space-y-3">
         {highlights.map(h => (
-          <div key={h.id} className="p-3.5 bg-white border-2 border-slate-300 rounded-2xl flex items-center gap-3 shadow-xs">
-            <img 
-              src={h.imageUrl} 
-              alt={h.title} 
-              referrerPolicy="no-referrer"
-              className="w-14 h-14 rounded-xl object-cover border-2 border-slate-300 shrink-0" 
-            />
-            <div className="flex-1 min-w-0 space-y-1.5">
+          <div key={h.id} className="p-3.5 bg-white border-2 border-slate-300 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-3 shadow-xs">
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <img 
+                src={h.imageUrl} 
+                alt={h.title} 
+                referrerPolicy="no-referrer"
+                className="w-16 h-16 rounded-xl object-cover border-2 border-slate-300 shrink-0" 
+              />
+              <button
+                type="button"
+                onClick={() => handleDelete(h.id)}
+                className="sm:hidden ml-auto p-2 text-red-600 hover:text-red-800 rounded-xl hover:bg-red-50"
+                title="ডিলিট"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 min-w-0 w-full space-y-2">
               <input
                 type="text"
                 value={h.title}
@@ -89,6 +101,7 @@ export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({
                 placeholder="কার্ড টাইটেল"
                 className="w-full text-xs sm:text-sm font-black text-slate-950 px-2.5 py-1.5 border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-600 placeholder:text-slate-400"
               />
+
               <input
                 type="text"
                 value={h.imageUrl}
@@ -104,13 +117,40 @@ export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({
                   }
                 }}
                 placeholder="ইমেজ URL অথবা ImgBB লিংক"
-                className="w-full text-xs font-mono font-bold text-slate-700 px-2.5 py-1 border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-600"
+                className="w-full text-xs font-mono font-bold text-slate-700 px-2.5 py-1.5 border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-600"
               />
+
+              {/* Target Click Link */}
+              <div className="space-y-1">
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-500">
+                    <LinkIcon className="w-3.5 h-3.5" />
+                  </div>
+                  <input
+                    type="url"
+                    value={h.linkUrl || ''}
+                    onChange={(e) => handleUpdate(h.id, { linkUrl: e.target.value })}
+                    placeholder="ছবিতে ক্লিক করলে যে লিংকে যাবে (ঐচ্ছিক URL, যেমন: https://...)"
+                    className="w-full text-xs font-medium text-slate-950 pl-8 pr-3 py-1.5 border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-600 placeholder:text-slate-400"
+                  />
+                </div>
+                {h.linkUrl && h.linkUrl.trim() !== '' ? (
+                  <p className="text-[11px] font-bold text-emerald-700 flex items-center gap-1 pl-1">
+                    <ExternalLink className="w-3 h-3 text-emerald-600" />
+                    <span>ক্লিকযোগ্য লিংক যুক্ত করা হয়েছে (ছবিতে ক্লিক করলে লিংকে নিয়ে যাবে)</span>
+                  </p>
+                ) : (
+                  <p className="text-[11px] font-semibold text-slate-500 pl-1">
+                    * লিংক না দিলে ছবিতে ক্লিক করলে কোথাও যাবে না (শুধু ছবি প্রদর্শিত হবে)
+                  </p>
+                )}
+              </div>
             </div>
+
             <button
               type="button"
               onClick={() => handleDelete(h.id)}
-              className="p-2 text-red-600 hover:text-red-800 rounded-xl hover:bg-red-50"
+              className="hidden sm:flex p-2 text-red-600 hover:text-red-800 rounded-xl hover:bg-red-50 shrink-0 self-center"
               title="ডিলিট"
             >
               <Trash2 className="w-4 h-4" />

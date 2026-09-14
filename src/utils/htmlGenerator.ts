@@ -267,15 +267,23 @@ export function generateStandaloneBioHtml(
         <div>
           <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">হাইলাইটস ও মোমেন্টস</h2>
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            ${highlights.map(h => `
-              <div class="group relative rounded-xl overflow-hidden aspect-square border border-slate-800 bg-slate-900">
-                <img src="${h.imageUrl}" alt="${h.title}" referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-2">
-                  <h4 class="text-[11px] font-bold text-white leading-tight truncate">${h.title}</h4>
-                  ${h.subtitle ? `<p class="text-[9px] text-cyan-300 truncate">${h.subtitle}</p>` : ''}
-                </div>
-              </div>
-            `).join('')}
+            ${highlights.map(h => {
+              const hasLink = Boolean(h.linkUrl && h.linkUrl.trim() !== '');
+              const tag = hasLink ? 'a' : 'div';
+              const hrefAttr = hasLink ? `href="${h.linkUrl}" target="_blank" rel="noopener noreferrer"` : '';
+              return `
+                <${tag} ${hrefAttr} class="group relative rounded-xl overflow-hidden aspect-square border border-slate-800 ${hasLink ? 'hover:border-cyan-400 cursor-pointer active:scale-95' : ''} bg-slate-900 block transition-all">
+                  <img src="${h.imageUrl}" alt="${h.title}" referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-2">
+                    <div class="flex items-center justify-between gap-1">
+                      <h4 class="text-[11px] font-bold text-white leading-tight truncate">${h.title}</h4>
+                      ${hasLink ? `<svg class="w-3 h-3 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>` : ''}
+                    </div>
+                    ${h.subtitle ? `<p class="text-[9px] text-cyan-300 truncate">${h.subtitle}</p>` : ''}
+                  </div>
+                </${tag}>
+              `;
+            }).join('')}
           </div>
         </div>
       ` : ''}
