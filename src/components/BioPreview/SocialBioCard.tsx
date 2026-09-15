@@ -35,16 +35,31 @@ export const SocialBioCard: React.FC<SocialBioCardProps> = ({
   const candidateName = personal.name || 'Your Name / IGN';
   const ytId = featuredMedia.enabled && featuredMedia.url ? (extractYouTubeId(featuredMedia.url) || featuredMedia.embedId) : null;
 
+  const shareConfig = state.shareSettings || {
+    enabled: state.showQrCode ?? true,
+    title: 'বন্ধুদের সাথে শেয়ার করুন',
+    subtitle: 'এই বায়ো পেজের লিংক এক ক্লিকে কপি করুন',
+    customShareUrl: 'https://bio-data-ochre.vercel.app',
+    buttonText: 'শেয়ার লিংক'
+  };
+
   const handleCopyUid = (uid: string) => {
     navigator.clipboard.writeText(uid);
     setCopiedUid(true);
     setTimeout(() => setCopiedUid(false), 2000);
   };
 
-  const handleCopyPageUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
+  const handleCopyShareUrl = () => {
+    const rawUrl = shareConfig.customShareUrl?.trim();
+    const urlToCopy = rawUrl && rawUrl !== '' ? rawUrl : window.location.href;
+    
+    navigator.clipboard.writeText(urlToCopy).then(() => {
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    }).catch(() => {
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    });
   };
 
   // Platform icon helper with colors
@@ -390,19 +405,25 @@ export const SocialBioCard: React.FC<SocialBioCardProps> = ({
         )}
 
         {/* SHARE & QR CODE BOX */}
-        {showQrCode && (
+        {shareConfig.enabled && (
           <div className="p-3.5 rounded-2xl bg-slate-900/80 border-2 border-slate-700 flex items-center justify-between gap-3 shadow-md">
-            <div className="space-y-0.5">
-              <h4 className="text-xs font-bold text-white">বন্ধুদের সাথে শেয়ার করুন</h4>
-              <p className="text-xs text-slate-300 font-medium">আপনার সোশ্যাল বায়ো লিংক কপি করুন</p>
+            <div className="space-y-0.5 min-w-0 flex-1">
+              <h4 className="text-xs font-bold text-white truncate">{shareConfig.title || 'বন্ধুদের সাথে শেয়ার করুন'}</h4>
+              <p className="text-xs text-slate-300 font-medium truncate">{shareConfig.subtitle || 'এই বায়ো পেজের লিংক এক ক্লিকে কপি করুন'}</p>
+              {shareConfig.customShareUrl && (
+                <p className="text-[10px] font-mono text-cyan-400 truncate opacity-85 mt-0.5" title={shareConfig.customShareUrl}>
+                  {shareConfig.customShareUrl}
+                </p>
+              )}
             </div>
             <button 
               type="button" 
-              onClick={handleCopyPageUrl}
-              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 transition-colors shadow-2xs"
+              onClick={handleCopyShareUrl}
+              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 active:scale-95 border border-slate-600 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 transition-all shadow-2xs shrink-0 cursor-pointer"
+              title="লিংক কপি করুন"
             >
               {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5 text-cyan-400" />}
-              <span>{copiedLink ? 'কপি হয়েছে' : 'শেয়ার লিংক'}</span>
+              <span>{copiedLink ? 'কপি হয়েছে' : (shareConfig.buttonText || 'শেয়ার লিংক')}</span>
             </button>
           </div>
         )}

@@ -4,6 +4,7 @@ import {
   Sparkles, 
   Palette, 
   Download, 
+  Upload,
   RotateCcw, 
   Share2, 
   Layers, 
@@ -16,6 +17,7 @@ interface HeaderNavbarProps {
   currentTheme: BioTheme;
   onOpenThemeModal: () => void;
   onOpenExportModal: () => void;
+  onOpenImportModal: () => void;
   onSelectPreset: (type: 'gamer' | 'creator' | 'developer') => void;
   onReset: () => void;
   socialCount: number;
@@ -25,6 +27,7 @@ export const HeaderNavbar: React.FC<HeaderNavbarProps> = ({
   currentTheme,
   onOpenThemeModal,
   onOpenExportModal,
+  onOpenImportModal,
   onSelectPreset,
   onReset,
   socialCount
@@ -113,11 +116,23 @@ export const HeaderNavbar: React.FC<HeaderNavbarProps> = ({
             <RotateCcw className="w-4 h-4" />
           </button>
 
+          {/* HTML Upload & Re-edit Button */}
+          <button
+            type="button"
+            onClick={onOpenImportModal}
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 hover:border-cyan-500/60 text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs active:scale-95 cursor-pointer"
+            title="পূর্বে তৈরি করা HTML ফাইল আপলোড করে এডিট করুন"
+          >
+            <Upload className="w-4 h-4 text-cyan-400" />
+            <span className="hidden sm:inline">HTML</span>
+            <span>আপলোড</span>
+          </button>
+
           {/* Primary HTML Download Button */}
           <button
             type="button"
             onClick={onOpenExportModal}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 via-teal-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-extrabold text-xs sm:text-sm rounded-xl shadow-lg shadow-cyan-500/25 transition-all active:scale-95"
+            className="flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-gradient-to-r from-cyan-500 via-teal-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-extrabold text-xs sm:text-sm rounded-xl shadow-lg shadow-cyan-500/25 transition-all active:scale-95 cursor-pointer"
           >
             <Download className="w-4 h-4" />
             <span>HTML ডাউনলোড</span>

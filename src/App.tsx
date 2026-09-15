@@ -12,6 +12,7 @@ import { BioFormContainer } from './components/BioEditor/BioFormContainer';
 import { BioPreview } from './components/BioPreview/BioPreview';
 import { ThemeSelectorModal } from './components/ThemeSelectorModal';
 import { HtmlExportModal } from './components/HtmlExportModal';
+import { HtmlImportModal } from './components/HtmlImportModal';
 import { 
   Sparkles, 
   Eye, 
@@ -20,7 +21,9 @@ import {
   Download, 
   Share2, 
   Flame,
-  CheckCircle
+  CheckCircle,
+  CheckCircle2,
+  X
 } from 'lucide-react';
 
 const STORAGE_KEY = 'social_bio_maker_state_v3';
@@ -57,6 +60,8 @@ export function App() {
 
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [importToast, setImportToast] = useState<string | null>(null);
   const [mobileActiveView, setMobileActiveView] = useState<'editor' | 'preview'>('editor');
 
   // Sync to local storage
@@ -75,6 +80,18 @@ export function App() {
       console.error(e);
     }
   }, [currentTheme]);
+
+  const handleImportHtml = (importedState: SocialBioState, importedTheme?: BioTheme) => {
+    setBioState(importedState);
+    if (importedTheme) {
+      setCurrentTheme(importedTheme);
+    }
+    const name = importedState.personal.name || 'সোশ্যাল বায়ো';
+    setImportToast(`"${name}" এর HTML ফাইল সফলভাবে লোড হয়েছে! এখন আপনি যেকোনো কিছু পরিবর্তন করতে পারবেন।`);
+    setTimeout(() => {
+      setImportToast(null);
+    }, 4500);
+  };
 
   const handleSelectPreset = (type: 'gamer' | 'creator' | 'developer') => {
     if (type === 'gamer') {
@@ -107,10 +124,28 @@ export function App() {
         currentTheme={currentTheme}
         onOpenThemeModal={() => setIsThemeModalOpen(true)}
         onOpenExportModal={() => setIsExportModalOpen(true)}
+        onOpenImportModal={() => setIsImportModalOpen(true)}
         onSelectPreset={handleSelectPreset}
         onReset={handleReset}
         socialCount={bioState.socialLinks.filter(s => s.enabled).length}
       />
+
+      {/* Import Notification Banner */}
+      {importToast && (
+        <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-cyan-950 border-b border-emerald-500/40 px-4 py-2.5 flex items-center justify-between gap-3 text-xs shadow-md animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="flex items-center gap-2 text-emerald-300 font-bold">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>{importToast}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setImportToast(null)}
+            className="p-1 text-slate-400 hover:text-white rounded-lg transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Mobile View Toggle Buttons (visible on small screens) */}
       <div className="lg:hidden px-4 py-2 bg-slate-900 border-b border-slate-800 flex items-center justify-center gap-2">
@@ -151,6 +186,7 @@ export function App() {
           <BioFormContainer
             state={bioState}
             onChange={setBioState}
+            onOpenImportModal={() => setIsImportModalOpen(true)}
           />
         </div>
 
@@ -181,6 +217,12 @@ export function App() {
         onClose={() => setIsExportModalOpen(false)}
         state={bioState}
         theme={currentTheme}
+      />
+
+      <HtmlImportModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+        onImport={handleImportHtml}
       />
 
     </div>

@@ -15,6 +15,14 @@ export function generateStandaloneBioHtml(
   const candidateName = personal.name || 'My Social Bio';
   const ytId = featuredMedia.enabled && featuredMedia.url ? (extractYouTubeId(featuredMedia.url) || featuredMedia.embedId) : null;
 
+  const shareConfig = state.shareSettings || {
+    enabled: showQrCode ?? true,
+    title: 'বন্ধুদের সাথে শেয়ার করুন',
+    subtitle: 'এই বায়ো পেজের লিংক এক ক্লিকে কপি করুন',
+    customShareUrl: 'https://bio-data-ochre.vercel.app',
+    buttonText: 'শেয়ার লিংক'
+  };
+
   // Render SVG icons helper
   const getPlatformIconSvg = (platform: string) => {
     switch (platform) {
@@ -329,19 +337,21 @@ export function generateStandaloneBioHtml(
       ` : ''}
 
       <!-- QR CODE & SHARE -->
-      ${showQrCode ? `
+      ${shareConfig.enabled ? `
         <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 flex items-center justify-between gap-3">
-          <div class="space-y-1">
-            <h4 class="text-xs font-bold text-white">বন্ধুদের সাথে শেয়ার করুন</h4>
-            <p class="text-[11px] text-slate-400">এই বায়ো পেজের লিংক এক ক্লিকে কপি করুন</p>
+          <div class="space-y-1 min-w-0 flex-1">
+            <h4 class="text-xs font-bold text-white truncate">${shareConfig.title || 'বন্ধুদের সাথে শেয়ার করুন'}</h4>
+            <p class="text-[11px] text-slate-400 truncate">${shareConfig.subtitle || 'এই বায়ো পেজের লিংক এক ক্লিকে কপি করুন'}</p>
+            ${shareConfig.customShareUrl ? `<p class="text-[10px] font-mono text-cyan-400 truncate opacity-85 mt-0.5">${shareConfig.customShareUrl}</p>` : ''}
           </div>
           <button 
             type="button" 
-            onclick="copyPageUrl()"
-            class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
+            onclick="copyShareUrl()"
+            class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 active:scale-95 border border-slate-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors shrink-0 cursor-pointer"
+            title="লিংক কপি করুন"
           >
             <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-            <span>শেয়ার লিংক</span>
+            <span id="shareBtnLabel">${shareConfig.buttonText || 'শেয়ার লিংক'}</span>
           </button>
         </div>
       ` : ''}
@@ -367,12 +377,35 @@ export function generateStandaloneBioHtml(
       });
     }
 
-    function copyPageUrl() {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        showToast('🔗 প্রোফাইল লিংক কপি হয়েছে!');
-      }).catch(() => {
-        showToast('🔗 লিংক কপি করা হয়েছে');
-      });
+    var customTargetShareUrl = ${JSON.stringify(shareConfig.customShareUrl || '')};
+    function copyShareUrl() {
+      var url = (customTargetShareUrl && customTargetShareUrl.trim() !== '') ? customTargetShareUrl.trim() : window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function() {
+          showToast('🔗 শেয়ার লিংক কপি হয়েছে: ' + url);
+        }).catch(function() {
+          fallbackCopy(url);
+        });
+      } else {
+        fallbackCopy(url);
+      }
+    }
+
+    function fallbackCopy(text) {
+      var textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast('🔗 শেয়ার লিংক কপি হয়েছে: ' + text);
+      } catch (err) {
+        showToast('🔗 লিংক: ' + text);
+      }
+      document.body.removeChild(textArea);
     }
 
     function showToast(msg) {
@@ -387,6 +420,11 @@ export function generateStandaloneBioHtml(
         }, 2200);
       }
     }
+  </script>
+
+  <!-- EMBEDDED CONFIGURATION FOR FUTURE EDITING (DO NOT REMOVE) -->
+  <script type="application/json" id="bio-profile-data">
+    ${JSON.stringify({ state, themeId: theme.id, version: 2, exportedAt: new Date().toISOString() }).replace(/<\/script/gi, '<\\/script')}
   </script>
 </body>
 </html>`;

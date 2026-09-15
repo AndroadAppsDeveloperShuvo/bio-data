@@ -89,6 +89,14 @@ export interface PersonalInfo {
   customStatusText?: string;
 }
 
+export interface ShareSettings {
+  enabled: boolean;
+  title: string;
+  subtitle: string;
+  customShareUrl: string; // ব্যবহারকারীর কাস্টম শেয়ার লিংক
+  buttonText: string;
+}
+
 export interface SocialBioState {
   personal: PersonalInfo;
   badges: ProfileBadge[];
@@ -98,6 +106,7 @@ export interface SocialBioState {
   highlights: HighlightItem[];
   contact: DirectContact;
   showQrCode: boolean;
+  shareSettings?: ShareSettings;
 }
 
 export interface BioTheme {

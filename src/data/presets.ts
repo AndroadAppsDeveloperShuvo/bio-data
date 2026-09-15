@@ -113,7 +113,14 @@ export const DEFAULT_SHUVO_PRESET: SocialBioState = {
     telegramUsername: 'djhakar007ff',
     customNote: 'যেকোনো প্রজেক্ট, কলাবোরেশন বা টেক প্রয়োজনে সরাসরি যোগাযোগ করুন।'
   },
-  showQrCode: true
+  showQrCode: true,
+  shareSettings: {
+    enabled: true,
+    title: 'বন্ধুদের সাথে শেয়ার করুন',
+    subtitle: 'এই বায়ো পেজের লিংক এক ক্লিকে কপি করুন',
+    customShareUrl: 'https://bio-data-ochre.vercel.app',
+    buttonText: 'শেয়ার লিংক'
+  }
 };
 
 export const GAMER_FREEFIRE_PRESET: SocialBioState = {

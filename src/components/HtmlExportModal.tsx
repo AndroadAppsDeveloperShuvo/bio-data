@@ -153,7 +153,17 @@ export const HtmlExportModal: React.FC<HtmlExportModalProps> = ({
               <CheckCircle className="w-4 h-4 text-pink-400 shrink-0 mt-0.5" />
               <div>
                 <strong className="text-white block font-bold">হোস্টিং ও শেয়ারিং রেডি</strong>
-                <span className="text-[11px] text-slate-400">GitHub Pages / Vercel বা মেসেঞ্জারে শেয়ারযোগ্য</span>
+                <span className="text-[11px] text-slate-400">GitHub Pages / Vercel বা বন্ধুদের সাথে শেয়ারযোগ্য</span>
+              </div>
+            </div>
+
+            <div className="p-3 bg-cyan-950/40 border border-cyan-500/40 rounded-xl flex items-start gap-2 col-span-1 sm:col-span-3">
+              <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-cyan-300 block font-bold text-xs">পুনরায় যেকোনো সময় এডিট সুবিধা (Auto-Editable)</strong>
+                <span className="text-[11px] text-slate-300">
+                  ভবিষ্যতে কোনো লিংক বা তথ্য পরিবর্তন করতে চাইলে নতুন করে লিখতে হবে না। শুধু এই ডাউনলোড করা <code className="text-cyan-300 font-mono font-bold">.html</code> ফাইলটি এই অ্যাপে <strong>"HTML আপলোড"</strong> বাটনে দিলেই সব তথ্য স্বয়ংক্রিয়ভাবে ফিরে আসবে!
+                </span>
               </div>
             </div>
           </div>
